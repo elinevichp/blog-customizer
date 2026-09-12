@@ -23,9 +23,9 @@ import styles from './ArticleParamsForm.module.scss';
 export const ArticleParamsForm = (props: {
 	onApply: (state: ArticleStateType) => void;
 }) => {
-	const rootRef = useRef<HTMLElement>(null);
+	const sidebarRef = useRef<HTMLElement>(null);
 
-	const [isOpen, setIsOpen] = useState(false);
+	const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
 	const [formState, setFormState] = useState(defaultArticleState);
 
@@ -34,36 +34,38 @@ export const ArticleParamsForm = (props: {
 	};
 
 	const toggleVisible = () => {
-		setIsOpen(!isOpen);
+		setIsSidebarOpen(!isSidebarOpen);
 	};
 
-	const handlerSubmit = (event: React.FormEvent) => {
+	const handleSubmit = (event: React.FormEvent) => {
 		event.preventDefault();
 		props.onApply(formState);
 	};
 
-	const handlerReset = (event: React.FormEvent) => {
+	const handleReset = (event: React.FormEvent) => {
 		event.preventDefault();
 		props.onApply(defaultArticleState);
 		setFormState(defaultArticleState);
 	};
 
 	useOutsideClickClose({
-		isOpen,
-		rootRef,
-		onChange: setIsOpen,
+		isOpen: isSidebarOpen,
+		rootRef: sidebarRef,
+		onChange: setIsSidebarOpen,
 	});
 
 	return (
 		<>
-			<ArrowButton isOpen={isOpen} onClick={toggleVisible} />
+			<ArrowButton isOpen={isSidebarOpen} onClick={toggleVisible} />
 			<aside
-				className={clsx(styles.container, { [styles.container_open]: isOpen })}
-				ref={rootRef}>
+				className={clsx(styles.container, {
+					[styles.container_open]: isSidebarOpen,
+				})}
+				ref={sidebarRef}>
 				<form
 					className={styles.form}
-					onSubmit={handlerSubmit}
-					onReset={handlerReset}>
+					onSubmit={handleSubmit}
+					onReset={handleReset}>
 					<Text as='h2' size={31} weight={800} uppercase>
 						Задайте параметры
 					</Text>
